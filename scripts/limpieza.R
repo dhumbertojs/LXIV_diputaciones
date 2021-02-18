@@ -5,6 +5,8 @@ library(janitor)
 library(stringr)
 
 datos <- "./datos"
+out <- "./output"
+
 a <- list.dirs(datos)
 a
 
@@ -128,6 +130,7 @@ stat <- final %>%
            organismo_que_llevo_a_cabo_la_sesion_o_reunion_catalogo) %>% 
   count()
   
+write.csv(final, paste(out, "asistencias.csv", sep = "/"), row.names = F)
 # Comisiones -----------------------------------------------------------------
 
 inp <- a[3]
@@ -292,6 +295,8 @@ comisiones <- left_join(c_vot, com, by = c("id", "archivo")) %>%
     tipo_de_voto = str_remove_all(tipo_de_voto, "_")
   )
 
+write.csv(comisiones, paste(out, "comisiones.csv", sep = "/"), row.names = F)
+
 # Pleno -------------------------------------------------------------------
 
 inp <- a[6]
@@ -320,6 +325,8 @@ p_lista <- map(list.files(inp),
 p_lista <- bind_rows(p_lista)
 
 v_pleno <- left_join(p_lista, pleno, by = c("id", "archivo"))
+
+write.csv(v_pleno, paste(out, "pleno.csv", sep = "/"), row.names = F)
 
 # iniciativas -------------------------------------------------------------
 
@@ -382,3 +389,5 @@ sec <- lapply(sec, setNames, n)
 sec <- bind_rows(sec)
 
 iniciativas <- bind_rows(fa, fb, sec)
+
+write.csv(iniciativas, paste(out, "iniciativas.csv", sep = "/"), row.names = F)
